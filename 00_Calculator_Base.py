@@ -207,7 +207,7 @@ def instructions():
 
 
 #  ***** Main Routines starts here *****
-print("***** Welcome to the Fund Raising Calculator *****")
+print("***** Welcome to the co-ordinate geometry Calculator *****")
 print()
 used_before = yes_no("Have you used the program before? ")
 if used_before == "no":
