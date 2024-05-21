@@ -1,4 +1,4 @@
-# program of midpoint fomula
+# program of midpoint formula
 
 print('-----------------------------------------------')
 print('                 Midpoint formula')
