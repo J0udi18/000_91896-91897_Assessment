@@ -49,9 +49,11 @@ def statement_generator(statement, side_decoration, top_bottom_decoration):
     return ""
 
 
+# displays instructions, returns 'None'
 def instructions():
     statement_generator("\033[103;33;30m \n")
     print("**** Instructions ****")
+    print()
     print("Choose an option:")
     print("1. Distance between two points")
     print("2. Midpoint of two points")
@@ -59,6 +61,7 @@ def instructions():
     print("4. Area of a triangle given its vertices")
     print("Remember to leave a space between the two values.")
     print()
+    return ""
 
 
 def distance_formula(x1, y1, x2, y2):
@@ -83,12 +86,12 @@ def area_triangle(x1, y1, x2, y2, x3, y3):
 # Main code
 # I should add a coloured code
 statement_generator("WWelcome to the Coordinate Geometry Calculator", "!", "=")
-
+print()
 used_before = yes_no("Have you used the program before? ")
 if used_before == "no":
     instructions()
-
-print("**** Program launched! ****")
+if used_before == "yes":
+    print("**** Program launched! ****")
 
 choice = input("Enter your choice (1/2/3/4): ")
 
