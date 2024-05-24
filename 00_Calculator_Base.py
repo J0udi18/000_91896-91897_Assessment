@@ -189,20 +189,13 @@ def instructions():
     print("**** Instructions ****")
     print()
 
-    print("This program will ask you for....")
-    print("- The name of the product you are selling")
-    print("- How many items you plan on selling")
-    print("- The costs for each component of the product")
-    print("- How much money you want to make")
-    print()
-
-    print("It will then output an itemised list of the costs")
-    print("with subtotals for the variable and fixed costs.")
-    print("Finally it will tell you how much you should sell")
-    print("each item for to reach your profit goal.")
-
-    print("The data will also be written to a text file which "
-          "has the same name as your product.")
+    print("This program will ask you to....")
+    print("Choose an option:")
+    print("1. Distance between two points")
+    print("2. Midpoint of two points")
+    print("3. Gradient between two points")
+    print("4. Area of a triangle given its vertices")
+    print("Remember to leave a space between the two values.")
     return ""
 
 
