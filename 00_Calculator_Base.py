@@ -1,296 +1,140 @@
-# import libraries
-import pandas
 import math
 
 
-# checks user has entered an integer
 def num_check(question, error, num_type):
     while True:
-
         try:
             response = num_type(input(question))
-
             if response <= 0:
                 print(error)
             else:
                 return response
-
         except ValueError:
             print(error)
 
 
-# Checks that user has entered yes / no to a question
 def yes_no(question):
     while True:
-
         response = input(question).lower()
-
-        if response == "yes" or response == "y":
-            return "yes"
-        elif response == "no" or response == "n":
-            return "no"
-
-        print("Please enter either yes or no...\n")
+        if response in ["yes", "no", "y", "n"]:
+            return response
+        print("Please enter either yes or no.")
 
 
-# checks that ticket name is not blank
-def not_blank(question, error):
-    valid = False
-
-    while not valid:
-        response = input(question)
-
-        # If name is not blank, program continues
-        if response == "":
-            print("{}. \nplease try again.\n".format(error))
-            continue
-
-        return response
-
-
-# currency formatting function
-def currency(x):
-    return "${:.2f}".format(x)
-
-
-# Gets expenses, returns lists which has
-# The data frame and sub_total
-def get_expenses(var_fixed):
-    # Set up dictionaries and lists
-
-    item_list = []
-    quantity_list = []
-    price_list = []
-
-    variable_dict = {
-        "Item": item_list,
-        "Quantity": quantity_list,
-        "Price": price_list
-    }
-
-    # loop to get component, quantity and price
-    item_name = ""
-    while item_name.lower() != "xxx":
-
-        print()
-        # get name, quantity and item
-        item_name = not_blank("Item name: ", "The component name")
-        if item_name.lower() == "xxx":
-            break
-
-        # if we have fixed costs, the quantity is one
-        if var_fixed == "variable":
-            quantity = num_check("Quantity:",
-                                 "The amount must be a whole number",
-                                 int)
-        else:
-            quantity = 1
-
-        price = num_check("How much for a single item? $",
-                          "The price must be a number < more than 0",
-                          float)
-
-        # add item, quantity and price to lists
-        item_list.append(item_name)
-        quantity_list.append(quantity)
-        price_list.append(price)
-
-    expense_frame = pandas.DataFrame(variable_dict)
-
-    # Calculate cost of each component
-    expense_frame['Cost'] = expense_frame['Quantity'] * expense_frame['Price']
-
-    expense_frame = expense_frame.set_index('Item')
-
-    # Find sub_total
-    sub_total = expense_frame['Cost'].sum()
-
-    # Currency Formatting (use currency function)
-    add_dollars = ['Price', 'Cost']
-    for item in add_dollars:
-        expense_frame[item] = expense_frame[item].apply(currency)
-
-    return [expense_frame, sub_total]
-
-
-def profit_goal(total_costs):
-    # Initialise variables and error message
-    error = "Please enter a valid profit goal\n"
-
-    valid = False
-    while not valid:
-
-        # ask for profit goal
-        response = input("what is your profit goal (eg $500 or 50%) ")
-
-        # check if first character us $...
-        if response[0] == "$":
-            profit_type = "$"
-            # Get amount (everything after the $)
-            amount = response[1:]
-
-        # check if last character is %
-        elif response[-1] == "%":
-            profit_type = "%"
-            # Get amount (everything before the %)
-            amount = response[:-1]
-
-        else:
-            # set response to amount for now
-            profit_type = "unknown"
-            amount = response
-
+def get_coordinate(prompt):
+    while True:
         try:
-            # Check amount is a number more than zero...
-            amount = float(amount)
-            if amount <= 0:
-                print(error)
-                continue
-
-
+            coordinate = input(prompt)
+            if coordinate.lower() == 'exit':
+                return None
+            else:
+                x, y = map(float, coordinate.split(','))
+                return x, y
         except ValueError:
-            print(error)
-            continue
-
-        if profit_type == "unknown" and amount >= 100:
-            dollar_type = yes_no("Do you mean ${:.2f}. ie {:.2f} dollars? ,"
-                                 " y / n ".format(amount, amount))
-
-            # Set profit type based on user answer above
-            if dollar_type == "yes":
-                profit_type = "$"
-            else:
-                profit_type = "%"
-
-        elif profit_type == "unknown" and amount < 100:
-            percent_type = yes_no("Do you mean {}%? , "
-                                  "y / n".format(amount))
-            if percent_type == "yes":
-                profit_type = "%"
-            else:
-                profit_type = "$"
-
-        # return profit goal to main routine
-        if profit_type == "$":
-            return amount
-        else:
-            goal = (amount / 100) * total_costs
-            return goal
+            print("Invalid input. Please enter coordinates in the format 'x, y' (e.g., 3, 4)")
 
 
-# rounding function
-def round_up(amount, var_round_to):
-    rounded_amount = math.ceil(amount / var_round_to) * var_round_to
-    return round(rounded_amount, 2)
+# Gives statements decoration on sides and top
+def statement_generator(statement, side_decoration, top_bottom_decoration):
+    sides = side_decoration * 3
+
+    statement = "{} {} {}".format(sides, statement, sides)
+
+    top_bottom = top_bottom_decoration * len(statement)
+
+    print(top_bottom)
+    print(statement)
+    print(top_bottom)
+
+    return ""
 
 
-# displays instructions, returns 'None'
 def instructions():
+    statement_generator("\033[103;33;30m \n")
     print("**** Instructions ****")
-    print()
-
-    print("This program will ask you to....")
     print("Choose an option:")
     print("1. Distance between two points")
     print("2. Midpoint of two points")
     print("3. Gradient between two points")
     print("4. Area of a triangle given its vertices")
     print("Remember to leave a space between the two values.")
-    return ""
+    print()
 
 
-#  ***** Main Routines starts here *****
-print("***** Welcome to the co-ordinate geometry Calculator *****")
-print()
+def distance_formula(x1, y1, x2, y2):
+    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
+
+def midpoint(x1, y1, x2, y2):
+    return (x1 + x2) / 2, (y1 + y2) / 2
+
+
+def gradient(x1, y1, x2, y2):
+    if x2 - x1 != 0:
+        return (y2 - y1) / (x2 - x1)
+    else:
+        return "Vertical line, undefined gradient"
+
+
+def area_triangle(x1, y1, x2, y2, x3, y3):
+    return abs(0.5 * ((x1 * (y2 - y3)) + (x2 * (y3 - y1)) + (x3 * (y1 - y2))))
+
+
+# Main code
+# I should add a coloured code
+statement_generator("WWelcome to the Coordinate Geometry Calculator", "!", "=")
+
 used_before = yes_no("Have you used the program before? ")
 if used_before == "no":
     instructions()
-if used_before == "yes":
-    print("**** Program launched! ****")
 
-# Get product name
+print("**** Program launched! ****")
 
-product_name = not_blank("Product name: ",
-                         "The product name can't be blank.")
-how_many = num_check("How many items will you be producing? ",
-                     "The number of item must be a whole "
-                     "number more than zero", int)
+choice = input("Enter your choice (1/2/3/4): ")
 
-print()
-print("Please enter your variable costs below...")
-# Get variable costs
-variable_expenses = get_expenses("variable")
-variable_frame = variable_expenses[0]
-variable_sub = variable_expenses[1]
-variable_txt = pandas.DataFrame.to_string(variable_frame)
+if choice == '1':
+    print("\nEnter coordinates of the two points:")
+    point1 = get_coordinate("Enter coordinates of first point (x1, y1): ")
+    if not point1:
+        exit()
+    point2 = get_coordinate("Enter coordinates of second point (x2, y2): ")
+    if not point2:
+        exit()
+    distance = distance_formula(*point1, *point2)
+    print(f"The distance between the two points is: {distance:.2f}")
 
-variable_heading = "===== Variable Costs ======"
+elif choice == '2':
+    print("\nEnter coordinates of the two points:")
+    point1 = get_coordinate("Enter coordinates of first point (x1, y1): ")
+    if not point1:
+        exit()
+    point2 = get_coordinate("Enter coordinates of second point (x2, y2): ")
+    if not point2:
+        exit()
+    mid = midpoint(*point1, *point2)
+    print(f"The midpoint of the line segment is: {mid}")
 
-print()
-have_fixed = yes_no("Do you have fixed costs (y / n)? ")
+elif choice == '3':
+    print("\nEnter coordinates of two points on the line:")
+    point1 = get_coordinate("Enter coordinates of first point (x1, y1): ")
+    if not point1:
+        exit()
+    point2 = get_coordinate("Enter coordinates of second point (x2, y2): ")
+    if not point2:
+        exit()
+    grad = gradient(*point1, *point2)
+    print(f"The gradient of the line passing through the two points is: {grad}")
 
-if have_fixed == "yes":
-    # Get fixed costs
-    fixed_expenses = get_expenses("fixed")
-    fixed_frame = fixed_expenses[0]
-    fixed_sub = fixed_expenses[1]
-    fixed_txt = pandas.DataFrame.to_string(fixed_frame)
-
-    fixed_heading = "===== Fixed Costs ======"
-
-else:
-    fixed_sub = 0
-    fixed_frame = ""
-    fixed_txt = ""
-    fixed_heading = ""
-
-# work out total costs and profit target
-all_costs = variable_sub + fixed_sub
-profit_target = profit_goal(all_costs)
-
-# Calculate total sales needed to reach goal
-sales_needed = all_costs + profit_target
-round_to = num_check("Round to nearest...? $", "Can't be 0", int)
-
-# Calculate recommended price
-selling_price = sales_needed / how_many
-print("Selling Price (unrounded): ${:.2f}".format(selling_price))
-
-recommended_price = round_up(selling_price, round_to)
-print(f"\nRRP: ${recommended_price}\n")
-
-# strings for printing...
-
-heading = f"****** {product_name} ******"
-variable_heading = f"=== Variable Costs ===="
-variable_sub_txt = f"Variable Costs Subtotal: ${variable_sub:.2f}"
-
-profit_target_heading = f"==== Profit & Selling Advice ===="
-
-fixed_cost_subtotal_txt = f"Fixed Costs Subtotal: ${fixed_sub:.2f}"
-profit_target_txt = f"Profit Target: ${profit_target:.2f}"
-sales_needed_txt = f"Required Sales: ${sales_needed:.2f}"
-recommended_price_txt = f"Recommended Price: ${recommended_price:.2f}"
-
-# List holding stuff to print / write to file
-to_write = [heading, variable_heading, variable_txt, variable_sub_txt,
-            fixed_heading, fixed_txt, profit_target_heading, fixed_cost_subtotal_txt,
-            profit_target_txt, sales_needed_txt,
-            recommended_price_txt]
-
-# Write to file
-# Create file to hold data (add .txt extension)
-file_name = "{}.txt".format(product_name)
-with open(file_name, "w+") as text_file:
-    # Heading
-    for item in to_write:
-        text_file.write(item)
-        text_file.write("\n\n")
-
-# Print Stuff
-for item in to_write:
-    print(item)
-    print()
-
-# Write success message
-print("Data written to file successfully!")
+elif choice == '4':
+    print("\nEnter coordinates of the three vertices of the triangle:")
+    point1 = get_coordinate("Enter coordinates of first vertex (x1, y1): ")
+    if not point1:
+        exit()
+    point2 = get_coordinate("Enter coordinates of second vertex (x2, y2): ")
+    if not point2:
+        exit()
+    point3 = get_coordinate("Enter coordinates of third vertex (x3, y3): ")
+    if not point3:
+        exit()
+    area = area_triangle(*point1, *point2, *point3)
+    print(f"The area of the triangle is: {area:.2f}")
