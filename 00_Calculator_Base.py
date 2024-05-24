@@ -83,9 +83,9 @@ def area_triangle(x1, y1, x2, y2, x3, y3):
     return abs(0.5 * ((x1 * (y2 - y3)) + (x2 * (y3 - y1)) + (x3 * (y1 - y2))))
 
 
-# Main code
+#  ***** Main Routines starts here *****
 # I should add a coloured code
-statement_generator("WWelcome to the Coordinate Geometry Calculator", "!", "=")
+statement_generator("Welcome to the Coordinate Geometry Calculator", "!", "=")
 print()
 used_before = yes_no("Have you used the program before? ")
 if used_before == "no":
