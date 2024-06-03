@@ -51,7 +51,7 @@ def statement_generator(statement, side_decoration, top_bottom_decoration):
 
 # displays instructions, returns 'None'
 def instructions():
-    statement_generator("\033[103;33;30m \n")
+    print("\033[128;1;4mHello\033[0m")
     print("**** Instructions ****")
     print()
     print("Choose an option:")
