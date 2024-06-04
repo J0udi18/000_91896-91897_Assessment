@@ -1,4 +1,9 @@
 import math
+from termcolor import colored
+
+
+def colored_message(text, color):
+    return colored(text, color)
 
 
 def num_check(question, error, num_type):
@@ -32,6 +37,7 @@ def get_coordinate(prompt):
                 return x, y
         except ValueError:
             print("Invalid input. Please enter coordinates in the format 'x, y' (e.g., 3, 4)")
+            print(colored_message("Invalid choice. Please enter one of the valid choices.", "red"))
 
 
 # Gives statements decoration on sides and top
@@ -51,8 +57,7 @@ def statement_generator(statement, side_decoration, top_bottom_decoration):
 
 # displays instructions, returns 'None'
 def instructions():
-    print("\033[128;1;4mHello\033[0m")
-    print("**** Instructions ****")
+    print("\033[128;1;4m****Instructions****\033[0m")
     print()
     print("Choose an option:")
     print("1. Distance between two points")
@@ -93,7 +98,14 @@ if used_before == "no":
 if used_before == "yes":
     print("**** Program launched! ****")
 
-choice = input("Enter your choice (1/2/3/4): ")
+valid_choices = ['1', '2', '3', '4']
+
+while True:
+    choice = input("Enter your choice (1/2/3/4): ")
+    if choice in valid_choices:
+        break
+    else:
+        print(colored_message("Invalid choice. Please enter one of the valid choices.", "red"))
 
 if choice == '1':
     print("\nEnter coordinates of the two points:")
