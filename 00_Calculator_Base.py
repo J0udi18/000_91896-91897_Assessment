@@ -3,7 +3,16 @@ from termcolor import colored
 
 
 def colored_message(text, color):
-    return colored(text, color)
+    colors = {
+        "red": "\033[91m",
+        "green": "\033[92m",
+        "yellow": "\033[93m",
+        "blue": "\033[94m",
+        "magenta": "\033[95m",
+        "cyan": "\033[96m",
+    }
+    end_color = "\033[0m"
+    return colors.get(color.lower(), "") + text + end_color
 
 
 def num_check(question, error, num_type):
@@ -36,8 +45,7 @@ def get_coordinate(prompt):
                 x, y = map(float, coordinate.split(','))
                 return x, y
         except ValueError:
-            print("Invalid input. Please enter coordinates in the format 'x, y' (e.g., 3, 4)")
-            print(colored_message("Invalid choice. Please enter one of the valid choices.", "red"))
+            print(colored_message("Invalid input. Please enter coordinates in the format 'x, y' (e.g., 3, 4)", "red"))
 
 
 # Gives statements decoration on sides and top
@@ -106,6 +114,7 @@ while True:
         break
     else:
         print(colored_message("Invalid choice. Please enter one of the valid choices.", "red"))
+        print()
 
 if choice == '1':
     print("\nEnter coordinates of the two points:")
