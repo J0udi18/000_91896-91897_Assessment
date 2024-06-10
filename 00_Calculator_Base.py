@@ -10,19 +10,26 @@ def colored_message(text, color):
         "blue": "\033[94m",
         "magenta": "\033[95m",
         "cyan": "\033[96m",
+        "blink": "\33[5m",
     }
     end_color = "\033[0m"
     return colors.get(color.lower(), "") + text + end_color
 
 
-def num_check(question, error, num_type):
+# Number checker to make sure inputs correctly
+# And it let the user exit by entering 'xxx'
+def num_check(question, error, num_type, exit_code='exit'):
     while True:
         try:
-            response = num_type(input(question))
-            if response <= 0:
-                print(error)
+            response = input(question)
+            if response == exit_code:
+                return exit_code  # Return the exit code if user wants to exit
             else:
-                return response
+                response = num_type(response)  # Convert input to the desired type
+                if response <= 0:
+                    print(error)
+                else:
+                    return response
         except ValueError:
             print(error)
 
@@ -32,7 +39,7 @@ def yes_no(question):
         response = input(question).lower()
         if response in ["yes", "no", "y", "n"]:
             return response
-        print("Please enter either yes or no.")
+        print(colored_message("Please enter either yes or no", "red"))
 
 
 def get_coordinate(prompt):
@@ -101,9 +108,9 @@ def area_triangle(x1, y1, x2, y2, x3, y3):
 statement_generator("Welcome to the Coordinate Geometry Calculator", "!", "=")
 print()
 used_before = yes_no("Have you used the program before? ")
-if used_before == "no":
+if used_before == "no" or used_before == "n":
     instructions()
-if used_before == "yes":
+elif used_before == "yes" or used_before == "y":
     print("**** Program launched! ****")
 
 valid_choices = ['1', '2', '3', '4']
