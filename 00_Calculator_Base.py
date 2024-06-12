@@ -16,16 +16,14 @@ def colored_message(text, color):
     return colors.get(color.lower(), "") + text + end_color
 
 
-# Number checker to make sure inputs correctly
-# And it let the user exit by entering 'xxx'
 def num_check(question, error, num_type, exit_code='exit'):
     while True:
         try:
             response = input(question)
             if response == exit_code:
-                return exit_code  # Return the exit code if user wants to exit
+                return exit_code
             else:
-                response = num_type(response)  # Convert input to the desired type
+                response = num_type(response)
                 if response <= 0:
                     print(error)
                 else:
@@ -55,22 +53,16 @@ def get_coordinate(prompt):
             print(colored_message("Invalid input. Please enter coordinates in the format 'x, y' (e.g., 3, 4)", "red"))
 
 
-# Gives statements decoration on sides and top
 def statement_generator(statement, side_decoration, top_bottom_decoration):
     sides = side_decoration * 3
-
     statement = "{} {} {}".format(sides, statement, sides)
-
     top_bottom = top_bottom_decoration * len(statement)
-
     print(top_bottom)
     print(statement)
     print(top_bottom)
-
     return ""
 
 
-# displays instructions, returns 'None'
 def instructions():
     print("\033[128;1;4m****Instructions****\033[0m")
     print()
@@ -103,8 +95,31 @@ def area_triangle(x1, y1, x2, y2, x3, y3):
     return abs(0.5 * ((x1 * (y2 - y3)) + (x2 * (y3 - y1)) + (x3 * (y1 - y2))))
 
 
-#  ***** Main Routines starts here *****
-# I should add a coloured code
+def get_user_choice(used_before, previous_choice=None):
+    choices = {
+        "1": "Distance between two points",
+        "2": "Midpoint of two points",
+        "3": "Gradient between two points",
+        "4": "Area of a triangle given its vertices"
+    }
+
+    if used_before == "yes" or used_before == "y":
+        if previous_choice is not None:
+            print("Your previous choice was:", choices[previous_choice])
+
+    valid_choices = ['1', '2', '3', '4']
+
+    while True:
+        choice = input("Enter your choice (1/2/3/4): ")
+        if choice in valid_choices:
+            print("You chose:", choices[choice])
+            return choice
+        else:
+            print(colored_message("Invalid choice. Please enter one of the valid choices.", "red"))
+            print()
+
+
+# Main Routine
 statement_generator("Welcome to the Coordinate Geometry Calculator", "!", "=")
 print()
 used_before = yes_no("Have you used the program before? ")
@@ -116,7 +131,7 @@ elif used_before == "yes" or used_before == "y":
 valid_choices = ['1', '2', '3', '4']
 
 while True:
-    choice = input("Enter your choice (1/2/3/4): ")
+    choice = get_user_choice(used_before)
     if choice in valid_choices:
         break
     else:
