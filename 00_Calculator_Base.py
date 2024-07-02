@@ -44,8 +44,8 @@ def get_coordinate(prompt):
     while True:
         try:
             coordinate = input(prompt)
-            if coordinate.lower() == 'exit':
-                return None
+            if coordinate.lower() == 'xxx':
+                return None  # Return None to signal changing the choice
             else:
                 x, y = map(float, coordinate.split(','))
                 return x, y
@@ -85,10 +85,10 @@ def midpoint(x1, y1, x2, y2):
 
 
 def gradient(x1, y1, x2, y2):
-    if x2 - x1 != 0:
-        return (y2 - y1) / (x2 - x1)
+    if x2 == x1:
+        return None  # Returning None for vertical line case
     else:
-        return "Vertical line, undefined gradient"
+        return (y2 - y1) / (x2 - x1)
 
 
 def area_triangle(x1, y1, x2, y2, x3, y3):
