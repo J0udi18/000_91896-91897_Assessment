@@ -2,6 +2,7 @@ import math
 from termcolor import colored
 
 
+# Function to colorize text for terminal output
 def colored_message(text, color):
     colors = {
         "red": "\033[91m",
@@ -16,6 +17,7 @@ def colored_message(text, color):
     return colors.get(color.lower(), "") + text + end_color
 
 
+# Function to check and retrieve a valid number input from the user
 def num_check(question, error, num_type, exit_code='exit'):
     while True:
         try:
@@ -32,6 +34,7 @@ def num_check(question, error, num_type, exit_code='exit'):
             print(error)
 
 
+# Function to get a yes/no response from the user
 def yes_no(question):
     while True:
         response = input(question).lower()
@@ -40,6 +43,7 @@ def yes_no(question):
         print(colored_message("Please enter either yes or no", "red"))
 
 
+# Function to get coordinates from the user
 def get_coordinate(prompt):
     while True:
         try:
@@ -53,6 +57,7 @@ def get_coordinate(prompt):
             print(colored_message("Invalid input. Please enter coordinates in the format 'x, y' (e.g., 3, 4)", "red"))
 
 
+# Function to generate a statement with decorations
 def statement_generator(statement, side_decoration, top_bottom_decoration):
     sides = side_decoration * 3
     statement = "{} {} {}".format(sides, statement, sides)
@@ -63,6 +68,7 @@ def statement_generator(statement, side_decoration, top_bottom_decoration):
     return ""
 
 
+# Function to display instructions
 def instructions():
     print("\033[128;1;4m****Instructions****\033[0m")
     print()
@@ -76,14 +82,17 @@ def instructions():
     return ""
 
 
+# Function to calculate distance between two points
 def distance_formula(x1, y1, x2, y2):
     return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
 
+# Function to calculate midpoint of two points
 def midpoint(x1, y1, x2, y2):
     return (x1 + x2) / 2, (y1 + y2) / 2
 
 
+# Function to calculate gradient (slope) between two points
 def gradient(x1, y1, x2, y2):
     if x2 == x1:
         return None  # Returning None for vertical line case
@@ -91,10 +100,12 @@ def gradient(x1, y1, x2, y2):
         return (y2 - y1) / (x2 - x1)
 
 
+# Function to calculate area of a triangle given its vertices
 def area_triangle(x1, y1, x2, y2, x3, y3):
     return abs(0.5 * ((x1 * (y2 - y3)) + (x2 * (y3 - y1)) + (x3 * (y1 - y2))))
 
 
+# Function to get user's choice of operation
 def get_user_choice(used_before, previous_choice=None):
     choices = {
         "1": "Distance between two points",
@@ -138,6 +149,7 @@ while True:
         print(colored_message("Invalid choice. Please enter one of the valid choices.", "red"))
         print()
 
+# Perform the chosen operation based on user's choice
 if choice == '1':
     print("\nEnter coordinates of the two points:")
     point1 = get_coordinate("Enter coordinates of first point (x1, y1): ")
@@ -158,7 +170,7 @@ elif choice == '2':
     if not point2:
         exit()
     mid = midpoint(*point1, *point2)
-    print(f"The midpoint of the line segment is: {mid}")
+    print(f"The midpoint of the line segment is: {mid :.2f},{mid[1]:.2f}")
 
 elif choice == '3':
     print("\nEnter coordinates of two points on the line:")
@@ -169,7 +181,10 @@ elif choice == '3':
     if not point2:
         exit()
     grad = gradient(*point1, *point2)
-    print(f"The gradient of the line passing through the two points is: {grad}")
+    if grad is not None:
+        print(f"The gradient of the line passing through the two points is: {grad:.2f}")
+    else:
+        print("The line is vertical. Gradient is undefined.")
 
 elif choice == '4':
     print("\nEnter coordinates of the three vertices of the triangle:")
