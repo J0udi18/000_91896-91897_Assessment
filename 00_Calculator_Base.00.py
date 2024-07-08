@@ -1,5 +1,3 @@
-import math
-
 # Function to colorize text for terminal output
 def colored_message(text, color):
     colors = {
@@ -53,13 +51,13 @@ def get_coordinate(prompt):
 
 # Function to generate a statement with decorations
 def statement_generator(statement, side_decoration, top_bottom_decoration):
-    sides = side_decoration * 3
+    sides = side_decoration * 5
     statement = "{} {} {}".format(sides, statement, sides)
     top_bottom = top_bottom_decoration * len(statement)
-    print(colored_message(top_bottom, "yellow"))
+    print(colored_message(top_bottom, "cyan"))
     print(colored_message(statement, "cyan"))
-    print(colored_message(top_bottom, "yellow"))
-    return ""
+    print(colored_message(top_bottom, "cyan"))
+    print()
 
 # Function to display instructions
 def instructions():
@@ -126,7 +124,7 @@ if used_before == "no" or used_before == "n":
 elif used_before == "yes" or used_before == "y":
     print("**** Program launched! ****")
 
-valid_choices = ['1', '2', '3', '4', '5']
+valid_choices = ['1', '2', '3', '4']
 
 while True:
     choice = get_user_choice(used_before)
@@ -187,6 +185,8 @@ elif choice == '4':
     area = area_triangle(*point1, *point2, *point3)
     print(f"The area of the triangle is: {area:.2f}")
 
-elif choice == '5':
-    print("\nEnter coordinates of the two endpoints of the line segment:")
-    point1 = get_coordinate("Enter coordinates of first endpoint (x1, y1):
+# Additional part added to the ending
+print()
+print(colored_message("Thank you for using the Coordinate Geometry Calculator!", "green"))
+statement_generator("Enjoy exploring coordinates with our calculator!", "*", "=")
+print(colored_message("Want to learn more? Check out our advanced features or contact us for assistance!", "blue"))
