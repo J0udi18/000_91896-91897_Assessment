@@ -1,6 +1,8 @@
 import math
+
 import pandas as pd
 from termcolor import colored
+import pandas
 
 
 # Function to colorize text for terminal output
@@ -22,37 +24,37 @@ def colored_message(text, color):
 def num_check(question, error, num_type, exit_code='exit'):
     while True:
         try:
-            response = input(colored_message(question, "yellow"))
+            response = input(colored_message(question, "yellow"))  # Prompt user for input
             if response == exit_code:
-                return exit_code
+                return exit_code  # Exit code handling
             else:
-                response = num_type(response)
+                response = num_type(response)  # Convert input to specified numeric type
                 if response <= 0:
                     print(colored_message(error, "red"))
                 else:
-                    return response
+                    return response  # Return valid numeric input
         except ValueError:
-            print(colored_message(error, "red"))
+            print(colored_message(error, "red"))  # Error message for invalid input format
 
 
 # Function to get a yes/no response from the user
 def yes_no(question):
     while True:
-        response = input(question).lower()
+        response = input(question).lower()  # Prompt user for yes/no response
         if response in ["yes", "no", "y", "n"]:
-            return response
-        print(colored_message("Please enter either yes or no", "red"))
+            return response  # Return valid yes/no response
+        print(colored_message("Please enter either yes or no", "red"))  # Error message for invalid response
 
 
 # Function to get coordinates from the user
 def get_coordinate(prompt):
     while True:
         try:
-            coordinate = input(colored_message(prompt, "yellow"))
+            coordinate = input(colored_message(prompt, "yellow"))  # Prompt user for coordinate input
             if coordinate.lower() == 'xxx':
-                return None
+                return None  # Return None to signal changing the choice
             else:
-                x, y = map(float, coordinate.split(','))
+                x, y = map(float, coordinate.split(','))  # Convert input to x, y coordinates
                 return x, y
         except ValueError:
             print(colored_message("Invalid input. Please enter coordinates in the format 'x, y' (e.g., 3, 4)", "red"))
@@ -60,9 +62,9 @@ def get_coordinate(prompt):
 
 # Function to generate a statement with decorations
 def statement_generator(statement, side_decoration, top_bottom_decoration):
-    sides = side_decoration * 5
-    statement = "{} {} {}".format(sides, statement, sides)
-    top_bottom = top_bottom_decoration * len(statement)
+    sides = side_decoration * 5  # Define side decorations
+    statement = "{} {} {}".format(sides, statement, sides)  # Format statement with decorations
+    top_bottom = top_bottom_decoration * len(statement)  # Determine length of top and bottom decorations
     print(top_bottom)
     print(statement)
     print(top_bottom)
@@ -71,39 +73,39 @@ def statement_generator(statement, side_decoration, top_bottom_decoration):
 
 # Function to display instructions
 def instructions():
-    print("\033[128;1;4m****Instructions****\033[0m")
+    print("\033[128;1;4m****Instructions****\033[0m")  # Print instructions header
     print()
-    print("Choose an option:")
-    print("1. Distance between two points")
-    print("2. Midpoint of two points")
-    print("3. Gradient between two points")
-    print("4. Area of a triangle given its vertices")
-    print("Remember to leave a space between the two values.")
+    print("Choose an option:")  # Print option prompt
+    print("1. Distance between two points")  # Print option 1
+    print("2. Midpoint of two points")  # Print option 2
+    print("3. Gradient between two points")  # Print option 3
+    print("4. Area of a triangle given its vertices")  # Print option 4
+    print("Remember to leave a space between the two values.")  # Reminder
     print()
     return ""
 
 
 # Function to calculate distance between two points
 def distance_formula(x1, y1, x2, y2):
-    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)  # Calculate and return distance
 
 
 # Function to calculate midpoint of two points
 def midpoint(x1, y1, x2, y2):
-    return (x1 + x2) / 2, (y1 + y2) / 2
+    return (x1 + x2) / 2, (y1 + y2) / 2  # Calculate and return midpoint coordinates
 
 
 # Function to calculate gradient (slope) between two points
 def gradient(x1, y1, x2, y2):
     if x2 == x1:
-        return None
+        return None  # Returning None for vertical line case
     else:
-        return (y2 - y1) / (x2 - x1)
+        return (y2 - y1) / (x2 - x1)  # Calculate and return gradient
 
 
 # Function to calculate area of a triangle given its vertices
 def area_triangle(x1, y1, x2, y2, x3, y3):
-    return abs(0.5 * ((x1 * (y2 - y3)) + (x2 * (y3 - y1)) + (x3 * (y1 - y2))))
+    return abs(0.5 * ((x1 * (y2 - y3)) + (x2 * (y3 - y1)) + (x3 * (y1 - y2))))  # Calculate and return triangle area
 
 
 # Function to get user's choice of operation
@@ -122,7 +124,6 @@ def get_user_choice(used_before, previous_choice=None):
         choice = input("Enter your choice (1/2/3/4): ")
         if choice in valid_choices:
             print("You chose:", choices[choice])
-            print(colored_message("If you want to change your choice enter 'xxx'", "green"))
             return choice
         else:
             print(colored_message("Invalid choice. Please enter one of the valid choices.", "red"))
@@ -141,8 +142,8 @@ def print_ending_message():
 # Main Routine
 statement_generator("Welcome to the Coordinate Geometry Calculator", "!", "=")
 print()
-
 used_before = yes_no("Have you used the program before? ")
+
 if used_before == "no" or used_before == "n":
     instructions()
 elif used_before == "yes" or used_before == "y":
@@ -150,137 +151,73 @@ elif used_before == "yes" or used_before == "y":
     print()
 
 # DataFrame to store results
-df = pd.DataFrame(columns=[
-    'Points',
-    'DMGE',
-    'Answer'
-])
+df = pd.DataFrame(columns=['Points', 'Distance', 'Midpoint', 'Gradient', 'Equation'])
 
 valid_choices = ['1', '2', '3', '4']
-previous_choice = None
-
-# List to hold results for printing and file writing
-results_to_write = []
 
 while True:
-    choice = get_user_choice(used_before, previous_choice)
-    previous_choice = choice
-
-    # Container for new row
-    new_row = {
-        'Points': '',
-        'DMGE': '',
-        'Answer': ''
-    }
+    choice = get_user_choice(used_before)
 
     if choice == '1':
         print("\nEnter coordinates of the two points:")
         point1 = get_coordinate("Enter coordinates of first point (x1, y1): ")
-        if not point1: continue
+        if not point1:
+            continue  # Continue the loop to prompt for new coordinates
         point2 = get_coordinate("Enter coordinates of second point (x2, y2): ")
-        if not point2: continue
+        if not point2:
+            continue  # Continue the loop to prompt for new coordinates
         x1, y1 = point1
         x2, y2 = point2
         distance = distance_formula(x1, y1, x2, y2)
-        result = f"{distance:.2f}"
-        print(f"The distance between ({x1}, {y1}) and ({x2}, {y2}) is: {result}")
-        new_row.update({
-            'Points': f"({x1}, {y1}) and ({x2}, {y2})",
-            'DMGE': 'Distance',
-            'Answer': result
-        })
-        results_to_write.append(f"Distance: {result}")
+        print(f"The distance between the two points is: {distance:.2f}")
 
     elif choice == '2':
         print("\nEnter coordinates of the two points:")
         point1 = get_coordinate("Enter coordinates of first point (x1, y1): ")
-        if not point1: continue
+        if not point1:
+            continue  # Continue the loop to prompt for new coordinates
         point2 = get_coordinate("Enter coordinates of second point (x2, y2): ")
-        if not point2: continue
+        if not point2:
+            continue  # Continue the loop to prompt for new coordinates
         mid = midpoint(*point1, *point2)
-        result = f"({mid[0]:.2f}, {mid[1]:.2f})"
-        print(
-            f"The midpoint of the line segment between ({point1[0]}, {point1[1]}) and ({point2[0]}, {point2[1]}) is: {result}")
-        new_row.update({
-            'Points': f"({point1[0]}, {point1[1]}) and ({point2[0]}, {point2[1]})",
-            'DMGE': 'Midpoint',
-            'Answer': result
-        })
-        results_to_write.append(f"Midpoint: {result}")
+        print(f"The midpoint of the line segment is: {mid[0]:.2f}, {mid[1]:.2f}")
 
     elif choice == '3':
         print("\nEnter coordinates of two points on the line:")
         point1 = get_coordinate("Enter coordinates of first point (x1, y1): ")
-        if not point1: continue
+        if not point1:
+            continue  # Continue the loop to prompt for new coordinates
         point2 = get_coordinate("Enter coordinates of second point (x2, y2): ")
-        if not point2: continue
+        if not point2:
+            continue  # Continue the loop to prompt for new coordinates
         grad = gradient(*point1, *point2)
         if grad is not None:
-            result = f"{grad:.2f}"
-            print(
-                f"The gradient of the line passing through ({point1[0]}, {point1[1]}) and ({point2[0]}, {point2[1]}) is: {result}")
+            print(f"The gradient of the line passing through the two points is: {grad:.2f}")
         else:
-            result = "Undefined"
-            print(
-                f"The line passing through ({point1[0]}, {point1[1]}) and ({point2[0]}, {point2[1]}) is vertical. Gradient is undefined.")
-        new_row.update({
-            'Points': f"({point1[0]}, {point1[1]}) and ({point2[0]}, {point2[1]})",
-            'DMGE': 'Gradient',
-            'Answer': result
-        })
-        results_to_write.append(f"Gradient: {result}")
+            print("The line is vertical. Gradient is undefined.")
 
     elif choice == '4':
         print("\nEnter coordinates of the three vertices of the triangle:")
         point1 = get_coordinate("Enter coordinates of first vertex (x1, y1): ")
-        if not point1: continue
+        if not point1:
+            continue  # Continue the loop to prompt for new coordinates
         point2 = get_coordinate("Enter coordinates of second vertex (x2, y2): ")
-        if not point2: continue
+        if not point2:
+            continue  # Continue the loop to prompt for new coordinates
         point3 = get_coordinate("Enter coordinates of third vertex (x3, y3): ")
-        if not point3: continue
+        if not point3:
+            continue  # Continue the loop to prompt for new coordinates
         area = area_triangle(*point1, *point2, *point3)
-        result = f"{area:.2f}"
-        print(
-            f"The area of the triangle with vertices ({point1[0]}, {point1[1]}), ({point2[0]}, {point2[1]}), ({point3[0]}, {point3[1]}) is: {result}")
-        new_row.update({
-            'Points': f"({point1[0]}, {point1[1]}) to ({point2[0]}, {point2[1]}) to ({point3[0]}, {point3[1]})",
-            'DMGE': 'Area',
-            'Answer': result
-        })
-        results_to_write.append(f"Area: {result}")
-
-    # Append the new row to the DataFrame if any new values
-    if any(new_row.values()):
-        df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+        print(f"The area of the triangle is: {area:.2f}")
 
     # Ask user if they want to continue
     continue_choice = yes_no("\nDo you want to perform another calculation? (yes/no): ")
     if continue_choice in ["no", "n"]:
         print_ending_message()
-        break
+        break  # Exit the loop and end the program
     elif continue_choice in ["yes", "y"]:
         print("\nReturning to main menu...\n")
-        used_before = yes_no
+        used_before = yes_no("Have you used the program before? ")  # Reset the used_before flag
     else:
         print(colored_message("Invalid choice. Exiting program.", "red"))
-        break
-
-# Export DataFrame to a CSV file
-df.to_csv('coordinate_geometry_calculations.csv', index=False)
-print("\nResults have been saved to 'coordinate_geometry_calculations.csv'.")
-
-# Write results to a text file with better formatting
-file_name = "coordinate_geometry_calculations.txt"
-with open(file_name, "w") as text_file:
-    for index, row in df.iterrows():
-        text_file.write(f"Points: {row['Points']}\n")
-        text_file.write(f"DMGE: {row['DMGE']}\n")
-        text_file.write(f"Answer: {row['Answer']}\n")
-        text_file.write("\n" + "=" * 50 + "\n")
-
-    # It adds a separator line at the bottom
-    text_file.write("=" * 50 + "\n")
-
-print("Results have been written to 'coordinate_geometry_calculations.txt'.")
-print("\n" + "=" * 50)
-print(df.to_string(index=False))
+        break  # Exit the loop and end the program
